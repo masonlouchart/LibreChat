@@ -1,0 +1,158 @@
+# For more information, see the Configuration Guide:
+# https://www.librechat.ai/docs/configuration/librechat_yaml
+
+# Configuration version (required)
+version: 1.3.12
+
+# Cache settings: Set to true to enable caching
+cache: true
+
+# Custom interface configuration
+interface:
+  customWelcome: 'Welcome to LibreChat! Enjoy your experience.'
+  # Enable/disable file search as a chatarea selection (default: true)
+  # Note: This setting does not disable the Agents File Search Capability.
+  # To disable the Agents Capability, see the Agents Endpoint configuration instead.
+  fileSearch: true
+  modelSelect: true
+  parameters: true
+  presets: true
+  prompts:
+    use: true
+    create: true
+    share: false
+    public: false
+  bookmarks: true
+  multiConvo: true
+  agents:
+    use: true
+    create: true
+    share: false
+    public: false
+  peoplePicker:
+    users: true
+    groups: true
+    roles: true
+  marketplace:
+    use: false
+  fileCitations: true
+
+# Example Registration Object Structure (optional)
+registration:
+  socialLogins: ['github', 'google', 'discord', 'openid', 'facebook', 'apple', 'saml']
+  # allowedDomains:
+  # - "gmail.com"
+
+# Agent Actions domain restrictions (OpenAPI spec validation)
+# SECURITY: If not configured, SSRF targets are blocked (localhost, private IPs, .internal/.local TLDs).
+# Prefer `allowedAddresses` for permitting internal targets — adding a private IP to
+# `allowedDomains` switches the field into strict-whitelist mode and blocks every
+# public destination not also listed.
+# Supports wildcards: '*.example.com' and protocol/port restrictions: 'https://api.example.com:8443'
+actions:
+  allowedDomains:
+    - 'swapi.dev'
+    - 'librechat.ai'
+    - 'google.com'
+    # - 'http://10.225.26.25:7894'  # Internal IP with protocol/port (uncomment if needed)
+  # `allowedAddresses` is an SSRF exemption list, NOT a strict whitelist.
+  # Hostname/IP + port pairs listed here bypass the default-deny block for that
+  # one private/loopback/link-local service. Public domains continue to work
+  # normally — listing private targets here does not restrict access to anything else.
+  #
+  # Entries must include a port: `host:port`, `private.ip:port`, or `[ipv6]:port`.
+  # Do not use URLs, paths, CIDR ranges, bare hosts/IPs, or public IP literals.
+  # Public IP literals are rejected at config load (the field is scoped to
+  # private IP space; public IPs aren't SSRF targets).
+  #
+  # NOTE on hostnames: a hostname entry trusts whatever IP that name resolves to
+  # on the listed port. If DNS for that name is hijacked or rotated to a different
+  # private IP, the exemption follows. Only list hostnames whose DNS you control.
+  # Prefer literal IPs when you can.
+  # allowedAddresses:
+  #   - 'host.docker.internal:11434'
+  #   - '127.0.0.1:11434'
+  #   - '10.0.0.5:8080'
+
+# Custom endpoint baseURL exemption list
+# SECURITY: User-provided baseURLs (`baseURL: 'user_provided'`) are validated against
+# the same SSRF block as Actions and MCP. If your users legitimately point at private
+# services (self-hosted Ollama, internal LLM gateway, etc.), list those hostname/IP
+# + port pairs here so the validator allows them through. Public destinations are
+# unaffected.
+#
+# Entries must include a port: `host:port`, `private.ip:port`, or `[ipv6]:port`.
+# Do not use URLs, paths, CIDR ranges, bare hosts/IPs, or public IP literals.
+# Hostname entries trust whatever IP they resolve to on the listed port — only
+# list names whose DNS you control.
+# endpoints:
+#   allowedAddresses:
+#     - 'localhost:11434'
+#     - '127.0.0.1:11434'
+#     - 'ollama:11434'
+#     - '10.0.0.5:8080'
+
+# Definition of custom endpoints
+endpoints:
+  custom:
+    - name: 'OpenRouter'
+      # For `apiKey` and `baseURL`, you can use environment variables that you define.
+      # recommended environment variables:
+      apiKey: '${OPENROUTER_KEY}'
+      baseURL: 'https://openrouter.ai/api/v1'
+      headers:
+        x-librechat-body-parentmessageid: '{{LIBRECHAT_BODY_PARENTMESSAGEID}}'
+      models:
+        fetch: false
+        default:
+          - 'meta-llama/llama-3.2-3b-instruct:free'
+          - 'google/gemma-4-31b-it:free'
+          - 'openai/gpt-oss-120b:free'
+        custom:
+          - name: "💎 Elite / Heavyweights"
+            models:
+              - "nousresearch/hermes-3-llama-3.1-405b:free"
+              - "nvidia/nemotron-3-super-120b-a12b:free"
+              - "openai/gpt-oss-120b:free"
+              - "qwen/qwen3-next-80b-a3b-instruct:free"
+              - "meta-llama/llama-3.3-70b-instruct:free"
+
+          - name: "🌟 Versatile / Mid-Range"
+            models:
+              - "google/gemma-4-31b-it:free"
+              - "google/gemma-4-26b-a4b-it:free"
+              - "cognitivecomputations/dolphin-mistral-24b-venice-edition:free"
+              - "z-ai/glm-4.5-air:free"
+              - "moonshotai/kimi-k2.6:free"
+              - "openai/gpt-oss-20b:free"
+
+          - name: "💻 Coding & Logic"
+            models:
+              - "qwen/qwen3-coder:free"
+              - "liquid/lfm-2.5-1.2b-thinking:free"
+              - "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
+              - "openrouter/owl-alpha"
+
+          - name: "⚡ Fast & Efficient"
+            models:
+              - "meta-llama/llama-3.2-3b-instruct:free"
+              - "nvidia/nemotron-3-nano-30b-a3b:free"
+              - "nvidia/nemotron-nano-12b-v2-vl:free"
+              - "nvidia/nemotron-nano-9b-v2:free"
+              - "liquid/lfm-2.5-1.2b-instruct:free"
+              - "poolside/laguna-m.1:free"
+              - "poolside/laguna-xs.2:free"
+
+          - name: "🧪 Experimental / Previews"
+            models:
+              - "openrouter/free" # The automatic free-router
+              - "google/lyria-3-pro-preview"
+              - "google/lyria-3-clip-preview"
+              - "nex-agi/nex-n2-pro:free"
+      titleConvo: true
+      titleMethod: 'completion'
+      titleModel: 'current_model'
+      # Recommended: Drop the stop parameter from the request as Openrouter models use a variety of stop tokens.
+      dropParams: ['stop']
+      modelDisplayLabel: 'OpenRouter'
+
