@@ -16,26 +16,22 @@ interface:
   fileSearch: true
   modelSelect: true
   parameters: true
-  presets: true
-  prompts:
-    use: true
-    create: true
-    share: false
-    public: false
+  presets: false
+  prompts: false
   bookmarks: true
-  multiConvo: true
-  agents:
-    use: true
-    create: true
-    share: false
-    public: false
+  memories: false
+  multiConvo: false
+  agents: false
+  temporaryChat: false
+  runCode: false
+  webSearch: false
   peoplePicker:
     users: true
     groups: true
     roles: true
   marketplace:
     use: false
-  fileCitations: true
+  fileCitations: false
 
 # Example Registration Object Structure (optional)
 registration:

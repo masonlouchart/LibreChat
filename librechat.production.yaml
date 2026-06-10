@@ -16,26 +16,22 @@ interface:
   fileSearch: true
   modelSelect: true
   parameters: true
-  presets: true
-  prompts:
-    use: true
-    create: true
-    share: false
-    public: false
+  presets: false
+  prompts: false
   bookmarks: true
-  multiConvo: true
-  agents:
-    use: true
-    create: true
-    share: false
-    public: false
+  memories: false
+  multiConvo: false
+  agents: false
+  temporaryChat: false
+  runCode: false
+  webSearch: false
   peoplePicker:
     users: true
     groups: true
     roles: true
   marketplace:
     use: false
-  fileCitations: true
+  fileCitations: false
 
 # Example Registration Object Structure (optional)
 registration:
@@ -74,85 +70,48 @@ actions:
   #   - '127.0.0.1:11434'
   #   - '10.0.0.5:8080'
 
-# Custom endpoint baseURL exemption list
-# SECURITY: User-provided baseURLs (`baseURL: 'user_provided'`) are validated against
-# the same SSRF block as Actions and MCP. If your users legitimately point at private
-# services (self-hosted Ollama, internal LLM gateway, etc.), list those hostname/IP
-# + port pairs here so the validator allows them through. Public destinations are
-# unaffected.
-#
-# Entries must include a port: `host:port`, `private.ip:port`, or `[ipv6]:port`.
-# Do not use URLs, paths, CIDR ranges, bare hosts/IPs, or public IP literals.
-# Hostname entries trust whatever IP they resolve to on the listed port — only
-# list names whose DNS you control.
-# endpoints:
-#   allowedAddresses:
-#     - 'localhost:11434'
-#     - '127.0.0.1:11434'
-#     - 'ollama:11434'
-#     - '10.0.0.5:8080'
-
-# Definition of custom endpoints
+# ---- OpenRouter specific configuration ---------------------------------------
 endpoints:
   custom:
     - name: 'OpenRouter'
-      # For `apiKey` and `baseURL`, you can use environment variables that you define.
-      # recommended environment variables:
       apiKey: '${OPENROUTER_KEY}'
       baseURL: 'https://openrouter.ai/api/v1'
       headers:
         x-librechat-body-parentmessageid: '{{LIBRECHAT_BODY_PARENTMESSAGEID}}'
       models:
-        fetch: false
         default:
-          - 'meta-llama/llama-3.2-3b-instruct:free'
+          - 'nex-agi/nex-n2-pro:free'
+          - 'nvidia/nemotron-3.5-content-safety:free'
+          - 'nvidia/nemotron-3-ultra-550b-a55b:free'
+          - 'openrouter/owl-alpha'
+          - 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free'
+          - 'poolside/laguna-xs.2:free'
+          - 'poolside/laguna-m.1:free'
+          - 'moonshotai/kimi-k2.6:free'
+          - 'google/gemma-4-26b-a4b-it:free'
           - 'google/gemma-4-31b-it:free'
+          - 'google/lyria-3-pro-preview'
+          - 'google/lyria-3-clip-preview'
+          - 'nvidia/nemotron-3-super-120b-a12b:free'
+          - 'openrouter/free'
+          - 'liquid/lfm-2.5-1.2b-thinking:free'
+          - 'liquid/lfm-2.5-1.2b-instruct:free'
+          - 'nvidia/nemotron-3-nano-30b-a3b:free'
+          - 'nvidia/nemotron-nano-12b-v2-vl:free'
+          - 'qwen/qwen3-next-80b-a3b-instruct:free'
+          - 'nvidia/nemotron-nano-9b-v2:free'
           - 'openai/gpt-oss-120b:free'
-        custom:
-          - name: "💎 Elite / Heavyweights"
-            models:
-              - "nousresearch/hermes-3-llama-3.1-405b:free"
-              - "nvidia/nemotron-3-super-120b-a12b:free"
-              - "openai/gpt-oss-120b:free"
-              - "qwen/qwen3-next-80b-a3b-instruct:free"
-              - "meta-llama/llama-3.3-70b-instruct:free"
-
-          - name: "🌟 Versatile / Mid-Range"
-            models:
-              - "google/gemma-4-31b-it:free"
-              - "google/gemma-4-26b-a4b-it:free"
-              - "cognitivecomputations/dolphin-mistral-24b-venice-edition:free"
-              - "z-ai/glm-4.5-air:free"
-              - "moonshotai/kimi-k2.6:free"
-              - "openai/gpt-oss-20b:free"
-
-          - name: "💻 Coding & Logic"
-            models:
-              - "qwen/qwen3-coder:free"
-              - "liquid/lfm-2.5-1.2b-thinking:free"
-              - "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
-              - "openrouter/owl-alpha"
-
-          - name: "⚡ Fast & Efficient"
-            models:
-              - "meta-llama/llama-3.2-3b-instruct:free"
-              - "nvidia/nemotron-3-nano-30b-a3b:free"
-              - "nvidia/nemotron-nano-12b-v2-vl:free"
-              - "nvidia/nemotron-nano-9b-v2:free"
-              - "liquid/lfm-2.5-1.2b-instruct:free"
-              - "poolside/laguna-m.1:free"
-              - "poolside/laguna-xs.2:free"
-
-          - name: "🧪 Experimental / Previews"
-            models:
-              - "openrouter/free" # The automatic free-router
-              - "google/lyria-3-pro-preview"
-              - "google/lyria-3-clip-preview"
-              - "nex-agi/nex-n2-pro:free"
+          - 'openai/gpt-oss-20b:free'
+          - 'z-ai/glm-4.5-air:free'
+          - 'qwen/qwen3-coder:free'
+          - 'cognitivecomputations/dolphin-mistral-24b-venice-edition:free'
+          - 'meta-llama/llama-3.3-70b-instruct:free'
+          - 'meta-llama/llama-3.2-3b-instruct:free'
+          - 'nousresearch/hermes-3-llama-3.1-405b:free'
+        fetch: false
       titleConvo: true
-      titleMethod: 'completion'
-      titleModel: 'current_model'
-      # Recommended: Drop the stop parameter from the request as Openrouter models use a variety of stop tokens.
-      dropParams: ['stop']
-      modelDisplayLabel: 'OpenRouter'
+      titleModel: "openrouter/free"
+      dropParams:
+        - "stop"
+      modelDisplayLabel: "OpenRouter"
 
